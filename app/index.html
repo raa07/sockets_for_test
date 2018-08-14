@@ -1,0 +1,39 @@
+<html>
+<head>
+<script>
+    var conn = new WebSocket('ws://localhost:8080');
+    conn.onopen = function(e) {
+        console.log("Connection established!");
+    };
+
+    conn.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+        addMsg(data['user'], data['msg']);
+    };
+
+    function sendMessage() {
+        var msg = document.getElementsByName('msg')[0].value;
+        addMsg('you', msg);
+        conn.send(msg);
+    }
+
+    function addMsg(user, msg) {
+        var chat = document.getElementsByClassName('chat')[0],
+        new_msg = document.createElement("p");
+        new_msg.innerHTML = "<b>" + user +"</b> : <span>" + msg + "</span><hr/>";
+
+        chat.appendChild(new_msg);;
+    }
+</script>
+</head>
+<body>
+<div>
+    <input name="msg" placeholder="Tape your message">
+    <button name="send" onClick="sendMessage()">Send</button>
+</div>
+<div class="chat" style="margin: 20px 0 0 50px;width:200px;">
+
+</div>
+</body>
+</html>
